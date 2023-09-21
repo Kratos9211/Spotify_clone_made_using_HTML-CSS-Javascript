@@ -143,4 +143,28 @@ document.getElementById("previous").addEventListener("click",()=>{
     masterPlay.classList.remove("fa-play-circle");
     masterPlay.classList.add("fa-pause-circle");
 })
+// Add an event listener for the "ended" event of the audio element
+audioElement.addEventListener("ended", () => {
+    // Increment the song index to move to the next song
+    songIndex++;
+
+    // Check if the songIndex exceeds the total number of songs
+    if (songIndex >= songs.length) {
+        // If it does, loop back to the first song
+        songIndex = 0;
+    }
+
+    // Load and play the next song
+    audioElement.src = songs[songIndex].filePath;
+    masterSongName.innerText = songs[songIndex].songName;
+    audioElement.currentTime = 0; // Reset the playback time
+    audioElement.play();
+    gif.style.opacity = 1;
+
+    // Update the play button for the next song
+    makeAllplays();
+    const nextSongPlayButton = document.getElementById(`${songIndex}`);
+    nextSongPlayButton.classList.remove("fa-play-circle");
+    nextSongPlayButton.classList.add("fa-pause-circle");
+});
 
