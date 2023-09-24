@@ -43,6 +43,25 @@ masterPlay.addEventListener("click",()=>{
     }
 })
 
+//Handle play /pause using space bar
+
+document.addEventListener("keypress",(e)=>{
+    if(e.code==="Space"){
+        if (audioElement.paused || audioElement.currentTime<=0){
+            audioElement.play();
+            masterPlay.classList.remove("fa-play-circle");
+            masterPlay.classList.add("fa-pause-circle");
+            gif.style.opacity=1;
+        }
+        else{
+            audioElement.pause();
+            masterPlay.classList.remove("fa-pause-circle");
+            masterPlay.classList.add("fa-play-circle");
+            gif.style.opacity=0;
+        }
+    }
+});
+
 //Listen to Events
 audioElement.addEventListener("timeupdate",()=>{
     //Update seekbar
@@ -167,4 +186,55 @@ audioElement.addEventListener("ended", () => {
     nextSongPlayButton.classList.remove("fa-play-circle");
     nextSongPlayButton.classList.add("fa-pause-circle");
 });
+
+
+// Add an event listener to listen for left and right arrow key presses
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+        // Handle previous song
+        playPreviousSong();
+    } else if (e.key === "ArrowRight") {
+        // Handle next song
+        playNextSong();
+    }
+});
+
+// Function to play the previous song
+function playPreviousSong() {
+    if (songIndex <= 0) {
+        songIndex = songs.length - 1;
+    } else {
+        songIndex -= 1;
+    }
+    playSelectedSong();
+}
+
+// Function to play the next song
+function playNextSong() {
+    if (songIndex >= songs.length - 1) {
+        songIndex = 0;
+    } else {
+        songIndex += 1;
+    }
+    playSelectedSong();
+}
+
+// Function to play the selected song
+function playSelectedSong() {
+    audioElement.src = songs[songIndex].filePath;
+    masterSongName.innerText = songs[songIndex].songName;
+    audioElement.currentTime = 0;
+    audioElement.play();
+    gif.style.opacity = 1;
+    makeAllplays();
+
+    // Update the play button for the selected song
+    const selectedSongPlayButton = document.getElementById(`${songIndex + 1}`);
+    selectedSongPlayButton.classList.remove("fa-play-circle");
+    selectedSongPlayButton.classList.add("fa-pause-circle");
+
+    // Update the master play button
+    masterPlay.classList.remove("fa-play-circle");
+    masterPlay.classList.add("fa-pause-circle");
+}
 
